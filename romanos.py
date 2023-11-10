@@ -1,26 +1,22 @@
 class RomanNumber:
     """
-        Crear una clase nueva de números. RomanNumber.
-        Debe permitir crear este tipo de número pudiendo tener
-        valores y realizar las operaciones principales.
+    Clase que representa un número romano con sus operaciones básicas.
 
-        Clase ----> Programación O.O.
-        Crear:
-            - Número natural entre 1 y 3999
-            - Cadena de caracteres "I" y "MMMCMXCIX"
-        str() → el número en romano
-        .valor = su valor como entero (sistema decimal)
+    Args:
+        entrada (int or str): Valor inicial del número (entero o cadena).
 
-        + → sumar
-        - → restar
-        / → dividir
-        * → producto
-        ** → potencia
-        // → división entera
-        % → resto
+    Attributes:
+        valor (int): Valor del número en formato decimal.
+        cadena (str): Representación del número en formato romano.
 
-        a = RomanNumber(1)      a.valor-->1  str(a) "I"
-        b = RomanNumber("I")    b.valor-->1  str(b) "I"
+    Methods:
+        __str__: Devuelve la representación en formato romano.
+        __repr__: Devuelve la representación en formato romano.
+        __eq__: Compara si dos números romanos son iguales.
+        __add__: Realiza la suma con otro número (romano, entero o cadena).
+        __radd__: Realiza la suma en el lado derecho.
+        convertir_en_romano: Convierte el valor decimal en formato romano.
+        convertir_en_numero: Convierte el valor romano en formato decimal.
     """
 
     def __init__(self, entrada):
@@ -54,15 +50,20 @@ class RomanNumber:
             return self.valor + sumando.valor
         elif isinstance(sumando, int):
             return self.valor + sumando
-        elif isinstance(sumando, str):  # sumando = "IV"
+        elif isinstance(sumando, str):
             return self.valor + RomanNumber(sumando).valor
-            # return RomanNumber(sumando) + self.valor
         raise TypeError("No puedo comparar eso con un número romano")
 
     def __radd__(self, sumando):
         return self + sumando
 
     def convertir_en_romano(self):
+        """
+        Convierte el valor decimal en formato romano.
+
+        Returns:
+            str: Representación en formato romano.
+        """
         numero = self.valor
         if not isinstance(numero, int):
             raise TypeError("ERROR: No has introducido un número entero")
@@ -72,11 +73,8 @@ class RomanNumber:
                 "ERROR: debe ser un valor entre 1 y 3999 (incluidos)")
 
         divisores = [1000, 100, 10, 1]
-        indices = []
-
-        for divisor in divisores:
-            indices.append(numero // divisor)
-            numero = numero % divisor
+        indices = [numero // divisor for divisor in divisores]
+        numero %= 1000
 
         millares = ["", "M", "MM", "MMM"]
         centenas = ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"]
@@ -91,6 +89,12 @@ class RomanNumber:
         return resultado
 
     def convertir_en_numero(self):
+        """
+        Convierte el valor romano en formato decimal.
+
+        Returns:
+            int: Valor decimal del número romano.
+        """
         romano = self.cadena
         digitos_romanos = {
             "M": 1000,
@@ -102,7 +106,7 @@ class RomanNumber:
             "I": 1
         }
 
-        valores_cinco = (5, 50, 500)
+        valores_cinco = {5, 50, 500}
 
         if not isinstance(romano, str):
             raise TypeError(
@@ -121,25 +125,24 @@ class RomanNumber:
             actual = digitos_romanos.get(letra)
 
             if actual == anterior and actual in valores_cinco:
-                raise ValueError('ERROR: no simbolos V, L, D repetidos')
+                raise ValueError('ERROR: no símbolos V, L, D repetidos')
 
             if actual > anterior:
                 if anterior in valores_cinco:
                     raise ValueError(
-                        "ERROR: no puedes restar simbolos V, L, D")
+                        "ERROR: no puedes restar símbolos V, L, D")
                 if 0 < anterior*10 < actual:
                     raise ValueError("ERROR: resta no posible")
                 if 0 < super_anterior <= anterior < actual:
                     raise ValueError(
-                        'ERROR: no puedes restar simbolos consecutivos')
+                        'ERROR: no puedes restar símbolos consecutivos')
 
-                resultado = resultado - anterior
-                resultado = resultado + (actual - anterior)
+                resultado -= anterior
+                resultado += (actual - anterior)
                 restado = True
-            else:   # actual <= anterior
-
+            else:
                 if actual == anterior:
-                    cuenta_repes = cuenta_repes + 1
+                    cuenta_repes += 1
                 else:
                     cuenta_repes = 1
                 if cuenta_repes > 3:
@@ -147,7 +150,7 @@ class RomanNumber:
                         'ERROR: no puede haber más de tres símbolos iguales consecutivos')
                 if actual >= super_anterior > 0 and restado:
                     raise ValueError("ERROR: resta imposible")
-                resultado = resultado + actual
+                resultado += actual
                 restado = False
 
             super_anterior = anterior

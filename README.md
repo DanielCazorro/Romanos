@@ -1,8 +1,10 @@
 # romanos
 
-Vamos a jugar con los números romanos y Python
+Este repositorio contiene ejercicios en Python relacionados con los números romanos.
 
-## Cómo se convierte un número natural menor que 4000 a Romano
+## Conversión de número natural a romano
+
+Para convertir un número natural menor que 4000 a romano, se realiza la descomposición en millares, centenas, decenas y unidades. Por ejemplo:
 
 ```
   1123 ==> MCXXIII
@@ -18,7 +20,11 @@ Vamos a jugar con los números romanos y Python
   2
   3
 
+  Cada posición se representa con los símbolos romanos correspondientes, y luego se combinan para formar el número romano completo.
+
 ## Cómo se convierte un número romano a entero
+
+Para convertir un número romano a entero, se suman los valores correspondientes a cada símbolo. Es importante considerar reglas como la resta en casos especiales (por ejemplo, IV en lugar de IIII) y la restricción de no más de tres símbolos iguales consecutivos. Ejemplos:
 
 ```
   MCXXIII ==> 1123
@@ -31,3 +37,4 @@ Vamos a jugar con los números romanos y Python
   MIX ==> 1000 1 10 --- 1000 + 10 - 1
 
 ```
+Estos ejemplos ilustran el proceso de convertir un número romano a su equivalente en números arábigos.
